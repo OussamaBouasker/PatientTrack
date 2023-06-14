@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+        /* Caption text */
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /*table css */
+        * {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5e9de9;
+            padding: 30px 0;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            margin: 10px 70px 70px;
+            box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .fl-table {
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: normal;
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 100%;
+            white-space: nowrap;
+            background-color: white;
+        }
+
+        .fl-table td,
+        .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #5e9de9;
+        }
+
+
+        .fl-table thead th:nth-child(odd) {
+            color: #ffffff;
+            background: #324960;
+        }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
+            .fl-table {
+                display: block;
+                width: 100%;
+            }
+
+            .table-wrapper:before {
+                content: "Scroll horizontally >";
+                display: block;
+                text-align: right;
+                font-size: 11px;
+                color: white;
+                padding: 0 0 10px;
+            }
+
+            .fl-table thead,
+            .fl-table tbody,
+            .fl-table thead th {
+                display: block;
+            }
+
+            .fl-table thead th:last-child {
+                border-bottom: none;
+            }
+
+            .fl-table thead {
+                float: left;
+            }
+
+            .fl-table tbody {
+                width: auto;
+                position: relative;
+                overflow-x: auto;
+            }
+
+            .fl-table td,
+            .fl-table th {
+                padding: 20px .625em .625em .625em;
+                height: 60px;
+                vertical-align: middle;
+                box-sizing: border-box;
+                overflow-x: hidden;
+                overflow-y: auto;
+                width: 120px;
+                font-size: 13px;
+                text-overflow: ellipsis;
+            }
+
+            .fl-table thead th {
+                text-align: left;
+                border-bottom: 1px solid #f7f7f9;
+            }
+
+            .fl-table tbody tr {
+                display: table-cell;
+            }
+
+            .fl-table tbody tr:nth-child(odd) {
+                background: none;
+            }
+
+            .fl-table tr:nth-child(even) {
+                background: transparent;
+            }
+
+            .fl-table tr td:nth-child(odd) {
+                background: #F8F8F8;
+                border-right: 1px solid #E6E4E4;
+            }
+
+            .fl-table tr td:nth-child(even) {
+                border-right: 1px solid #E6E4E4;
+            }
+
+            .fl-table tbody td {
+                display: block;
+                text-align: center;
+            }
+        }
+
+        .btn {
+            background-color: #da5230;
+            color: white;
+            padding-left: 4px;
+            padding-right: 4px;
+            padding-bottom: 4px;
+            padding-top: 6px;
+            margin: 10px 0;
+            border: none;
+            width: 50%;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #dc8c82;
+        }
+
+        /*Modal css*/
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Full-width input fields */
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* Center the image and position the close button */
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+            position: relative;
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        .modal1 {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content1 {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button (x) */
+        .close1 {
+            position: absolute;
+            right: 390px;
+            top: 70px;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close1:hover,
+        .close1:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            span.psw {
+                color: #080808;
+                display: block;
+                float: none;
+            }
+
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+
+        .button4 {
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <BR>
+    <div style="padding-right: 5%;" class="imgcontainer">
+        <a href="homePage.html">
+            <span class="close" title="Close Modal">&times;</span>
+        </a>
+    </div>
+    <BR>
+    <p style="text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: xx-large; color: #5e9de9;">
+        Liste des patients
+    </p>
+    <div style="text-align: center; margin-top: 40px;">
+        <button type="button" id="addPatientBtn" style="
+            margin-bottom: 10px; 
+            background-color: #5e9de9;
+            border: none;
+            color: white;
+            padding: 12px 60px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            float: right;
+            cursor: pointer;
+            margin-right: 70px;
+            width: 20%;">
+            Ajout d'un patient
+        </button>
+    </div>
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>Ajout d'une prescription</th>
+                    <th>Nom</th>
+                    <th>Age</th>
+                    <th>sexe</th>
+                    <th>maladie</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn11" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>Majdi Lakhal</td>
+                    <td>30</td>
+                    <td>Men</td>
+                    <td>Bipolaire</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn22" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>mahrez junior</td>
+                    <td>22</td>
+                    <td>Men</td>
+                    <td>Athérome et athérosclérose.</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn1">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn33" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>jack walker</td>
+                    <td>45</td>
+                    <td>Men</td>
+                    <td>Diabète sucré</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn2">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn44" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>alice grealish</td>
+                    <td>25</td>
+                    <td>femme</td>
+                    <td>Asthme</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn3">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn55" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>sarah lopez</td>
+                    <td>18</td>
+                    <td>femme</td>
+                    <td>Cancer</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn4">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn66" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>adam leao</td>
+                    <td>50</td>
+                    <td>Men</td>
+                    <td>Endométriose</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn5">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="button4" type="button" id="myBtn77" style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;">
+                            Ajout
+                        </button>
+                    </td>
+                    <td>samia oliver</td>
+                    <td>70</td>
+                    <td>femme</td>
+                    <td>Autophagie</td>
+                    <td>
+                        <button type="button" class="btn" id="myBtn6">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+            <tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+
+    <div id="deleteModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="doctorspace.html">
+            <span class="close">&times;</span></a>
+            <h2>Suppression du patient</h2>
+            <p>est ce que tu est sur tu veux supprimer ce patient ?</p>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="doctorspace.html">
+                    <button type="button" style="
+                    margin-bottom: 10px; 
+                    background-color: #e78989;
+                    border: none;
+                    color: white;
+                    padding: 12px 60px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                ">
+                        No
+                    </button>
+                </a>
+                <a href="doctorspace.html">
+                    <button type="button" class="signupbtn" style="
+                    margin-bottom: 10px; 
+                    background-color: #5e9de9;
+                    border: none;
+                    color: white;
+                    padding: 12px 60px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    ">
+                        Yes
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!--Add a new prescription modal-->
+    <div id="addPrescriptionModal" class="modal1">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="doctorspace.html">
+            <span class="close1">&times;</span></a>
+            <h2>Ajouter une nouvelle prescription</h2>
+            <div>
+                <form class="animate" action="/action_page.php" method="post">
+                    <div class="container">
+                        <label for="Nom du medicament">
+                            <b>Nom du medicament</b>
+                        </label>
+                        <input type="text" placeholder="Entrer Nom du medicament" name="Nom du medicament" required>
+                        <label for="Quantité">
+                            <b>Quantité</b>
+                        </label>
+                        <input type="text" placeholder="Entrer la quantité" name="psw" required>
+                        <label for="l'heure specifique">
+                            <b>l'heure specifique</b>
+                        </label>
+                        <input type="text" placeholder="Entrer l'heure specifique" name="l'heure specifique" required>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="doctorspace.html">
+                    <button type="button" style="
+                        margin-bottom: 10px;
+                        background-color: #e78989;
+                        border: none;
+                        color: white;
+                        padding: 12px 60px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        ">
+                        Annuler
+                    </button>
+                </a>
+                <a href="doctorspace.html">
+                    <button type="button" class="signupbtn" style="
+                        margin-bottom: 10px; 
+                        background-color: #5e9de9;
+                        border: none;
+                        color: white;
+                        padding: 12px 60px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                ">
+                        Ajouter prescription
+                    </button>
+                </a>
+                </a>
+            </div>
+        </div>
+    </div>
+    <br>
+    
+     <!--Add a new patient modal-->
+     <div id="addPatientModal" class="modal1">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="doctorspace.html">
+            <span class="close1">&times;</span></a>
+            <h2>Ajouter un nouveau patient</h2>
+            <div>
+                <form class="animate" action="/action_page.php" method="post">
+                    <div class="container">
+                        <label for="Nom du patient">
+                            <b>Nom du patient</b>
+                        </label>
+                        <input type="text" placeholder="Entrer le nom du patient" name="productName" required>
+                        <label for="Age">
+                            <b>Age</b>
+                        </label>
+                        <input type="text" placeholder="Entrer l'age du patient" name="Age" required>
+                        <label for="Sexe">
+                            <b>Sexe</b>
+                        </label>
+                        <input type="text" placeholder="Entrer le sexe du patient" name="Sexe" required>
+                        <label for="Maladie">
+                            <b>Maladie</b>
+                        </label>
+                        <input type="text" placeholder="Entrer la maladie du patient" name="Maladie" required>
+ 
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="doctorspace.html">
+                    <button type="button" style="
+                        margin-bottom: 10px;
+                        background-color: #e78989;
+                        border: none;
+                        color: white;
+                        padding: 12px 60px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        ">
+                        Cancel
+                    </button>
+                </a>
+                <a href="doctorspace.html">
+                    <button type="button" class="signupbtn" style="
+                        margin-bottom: 10px; 
+                        background-color: #5e9de9;
+                        border: none;
+                        color: white;
+                        padding: 12px 60px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                ">
+                        Add product
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(window).on('resize', function () {
+
+            if ($(this).width() < 760) {
+                $('tr td:first-child').click(function () {
+
+                    $(this).siblings().css({ 'display': 'inline-block' });
+
+                    var $this = $(this);
+                    setTimeout(function () {
+                        $this.siblings().css('transform', 'translateY(0)');
+                    }, 0);
+
+                    $('tr td:first-child').not($(this)).siblings().css({ 'display': 'none', 'transform': 'translateY(-9999px)' });
+                });
+            } else if ($(this).width() > 760) {
+                //unbind click : name is not clickable when screen is > 700px
+                $("tr td:first-child").unbind("click");
+                //remove with jquery added styles
+                $('tr td:first-child').siblings().css({ 'display': '', 'transform': '' });
+            }
+
+        }).resize();
+    </script>
+
+    <script>
+        // Get the delete modal
+        var deleteModal = document.getElementById("deleteModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        var btn1 = document.getElementById("myBtn1");
+        var btn2 = document.getElementById("myBtn2");
+        var btn3 = document.getElementById("myBtn3");
+        var btn4 = document.getElementById("myBtn4");
+        var btn5 = document.getElementById("myBtn5");
+        var btn6 = document.getElementById("myBtn6");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn1.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn2.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn3.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn4.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn5.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+        btn6.onclick = function () {
+            deleteModal.style.display = "block";
+        }
+
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            deleteModal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        // Get the add modal
+        var modal = document.getElementById("addPrescriptionModal");
+
+        // Get the button that opens the modal
+        var btn11 = document.getElementById("myBtn11");
+        var btn22 = document.getElementById("myBtn22");
+        var btn33 = document.getElementById("myBtn33");
+        var btn44 = document.getElementById("myBtn44");
+        var btn55 = document.getElementById("myBtn55");
+        var btn66 = document.getElementById("myBtn66");
+        var btn66 = document.getElementById("myBtn77");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn11.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn22.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn33.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn44.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn55.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn66.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn77.onclick = function () {
+            modal.style.display = "block";
+        }
+
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+<script>
+    // Get the add modal
+    var addPatientModal = document.getElementById("addPatientModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("addPatientBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close1")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        addPatientModal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        addPatientModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == addPatientModal) {
+            addPatientModal.style.display = "none";
+        }
+    }
+</script>
+
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                blah.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+</body>
+
+</html>

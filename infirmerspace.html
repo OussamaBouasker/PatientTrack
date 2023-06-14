@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+        .topnav {
+            overflow: hidden;
+            background-color: rgb(208, 231, 243);
+        }
+
+        .topnav a {
+            float: left;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #5e9de9;
+            color: black;
+        }
+
+        .topnav .icon {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            .topnav a:not(:first-child) {
+                display: none;
+            }
+
+            .topnav a.icon {
+                float: right;
+                display: block;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .topnav.responsive {
+                position: relative;
+            }
+
+            .topnav.responsive .icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .topnav.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+        }
+
+        /* Slideshow css */
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Verdana, sans-serif;
+            margin: 0;
+
+        }
+
+        .mySlides {
+            display: none
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        /* Slideshow container */
+        .slideshow-container {
+            position: relative;
+            margin: auto;
+
+        }
+
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Caption text */
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* The dots/bullets/indicators */
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .active,
+        .dot:hover {
+            background-color: #717171;
+        }
+
+        /* Fading animation */
+        .fade {
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: .4
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        /* On smaller screens, decrease text size */
+        @media only screen and (max-width: 300px) {
+
+            .prev,
+            .next,
+            .text {
+                font-size: 11px
+            }
+        }
+
+        /* CSS Carousel */
+        /* external css: flickity.css */
+
+        .gallery {
+            background: #EEE;
+        }
+
+        .gallery-cell {
+            width: 25%;
+            height: 550px;
+            margin-right: 10px;
+        }
+
+        /* cell number */
+        .gallery-cell:before {
+            display: block;
+            content: '';
+        }
+
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 25%;
+            padding: 10px;
+            height: 200px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .fa {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 2px;
+            border-radius: 50%;
+            color: black;
+        }
+
+        .fa:hover {
+            opacity: 0.7;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: black;
+            padding: 11px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        /*table css */
+        * {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5e9de9;
+            padding: 30px 0;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            margin: 10px 70px 70px;
+            box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .fl-table {
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: normal;
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 100%;
+            white-space: nowrap;
+            background-color: white;
+        }
+
+        .fl-table td,
+        .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #5e9de9;
+        }
+
+
+        .fl-table thead th:nth-child(odd) {
+            color: #ffffff;
+            background: #324960;
+        }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
+            .fl-table {
+                display: block;
+                width: 100%;
+            }
+
+            .table-wrapper:before {
+                content: "Scroll horizontally >";
+                display: block;
+                text-align: right;
+                font-size: 11px;
+                color: white;
+                padding: 0 0 10px;
+            }
+
+            .fl-table thead,
+            .fl-table tbody,
+            .fl-table thead th {
+                display: block;
+            }
+
+            .fl-table thead th:last-child {
+                border-bottom: none;
+            }
+
+            .fl-table thead {
+                float: left;
+            }
+
+            .fl-table tbody {
+                width: auto;
+                position: relative;
+                overflow-x: auto;
+            }
+
+            .fl-table td,
+            .fl-table th {
+                padding: 20px .625em .625em .625em;
+                height: 60px;
+                vertical-align: middle;
+                box-sizing: border-box;
+                overflow-x: hidden;
+                overflow-y: auto;
+                width: 120px;
+                font-size: 13px;
+                text-overflow: ellipsis;
+            }
+
+            .fl-table thead th {
+                text-align: left;
+                border-bottom: 1px solid #f7f7f9;
+            }
+
+            .fl-table tbody tr {
+                display: table-cell;
+            }
+
+            .fl-table tbody tr:nth-child(odd) {
+                background: none;
+            }
+
+            .fl-table tr:nth-child(even) {
+                background: transparent;
+            }
+
+            .fl-table tr td:nth-child(odd) {
+                background: #F8F8F8;
+                border-right: 1px solid #E6E4E4;
+            }
+
+            .fl-table tr td:nth-child(even) {
+                border-right: 1px solid #E6E4E4;
+            }
+
+            .fl-table tbody td {
+                display: block;
+                text-align: center;
+            }
+        }
+
+        .btn {
+            background-color: #da5230;
+            color: white;
+            padding-left: 4px;
+            padding-right: 4px;
+            padding-bottom: 4px;
+            padding-top: 6px;
+            margin: 10px 0;
+            border: none;
+            width: 50%;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #dc8c82;
+        }
+
+        /*Modal css*/
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Full-width input fields */
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* Center the image and position the close button */
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+            position: relative;
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        .modal1 {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content1 {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button (x) */
+        .close1 {
+            position: absolute;
+            right: 390px;
+            top: 70px;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close1:hover,
+        .close1:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+        .button4 {border-radius: 12px;}
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+        </style>
+    </head>
+    <body>
+<BR>
+    <div style="padding-right: 5%;" class="imgcontainer">
+        <a href="homePage.html">
+            <span class="close" title="Close Modal">&times;</span>
+        </a>
+        
+    </div>
+<BR>
+        <p style="text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: xx-large; color: #5e9de9;">
+            Liste des patients 
+        </p>
+        <div class="table-wrapper">
+            <table class="fl-table">
+                <thead>
+                    <tr>
+                        <th>Ajout du prescription</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Disease</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                                Voir prescription
+                            </button></a>
+                        </td>
+                        <td>Majdi Lakhal</td>
+                        <td>30</td>
+                        <td>Men</td>
+                        <td>Bipolaire</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>mahrez junior</td>
+                        <td>22</td>
+                        <td>Men</td>
+                        <td>Athérome et athérosclérose.</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>jack walker</td>
+                        <td>45</td>
+                        <td>Men</td>
+                        <td>Diabète sucré</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>alice grealish</td>
+                        <td>25</td>
+                        <td>women</td>
+                        <td>Asthme</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>sarah lopez</td>
+                        <td>18</td>
+                        <td>women</td>
+                        <td>Cancer</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>adam leao</td>
+                        <td>50</td>
+                        <td>Men</td>
+                        <td>Endométriose</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="prescription.html">
+                            <button
+                                class="button4"
+                                type="button"
+                                id="myBtnAdd"
+                                style="
+                            
+                            background-color:#04AA6D;
+                            border: none;
+                            color: white;
+                           
+                            text-align: center;
+                            text-decoration: none;
+                            font-size: 16px;
+                            
+                            cursor: pointer;
+                           
+                            width: 50%;"
+                            >
+                            Voir prescription
+                            </button></a>
+                        </td>
+                        <td>samia oliver</td>
+                        <td>70</td>
+                        <td>women</td>
+                        <td>Autophagie</td>
+
+                    </tr>
+                    <tbody>
+                    </table>
+                </div>
+                <br>
+                
+                <script>
+        $(window).on('resize', function () {
+
+            if ($(this).width() < 760) {
+                $('tr td:first-child').click(function () {
+
+                    $(this).siblings().css({ 'display': 'inline-block' });
+
+                    var $this = $(this);
+                    setTimeout(function () {
+                        $this.siblings().css('transform', 'translateY(0)');
+                    }, 0);
+
+                    $('tr td:first-child').not($(this)).siblings().css({ 'display': 'none', 'transform': 'translateY(-9999px)' });
+                });
+            } else if ($(this).width() > 760) {
+                //unbind click : name is not clickable when screen is > 700px
+                $("tr td:first-child").unbind("click");
+                //remove with jquery added styles
+                $('tr td:first-child').siblings().css({ 'display': '', 'transform': '' });
+            }
+
+        }).resize();
+                </script>
+                <script>
+        // Get the delete modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        var btn1 = document.getElementById("myBtn1");
+        var btn2 = document.getElementById("myBtn2");
+        var btn3 = document.getElementById("myBtn3");
+        var btn4 = document.getElementById("myBtn4");
+        var btn5 = document.getElementById("myBtn5");
+        var btn6 = document.getElementById("myBtn6");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn1.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn2.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn3.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn4.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn5.onclick = function () {
+            modal.style.display = "block";
+        }
+        btn6.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+                </script>
+                <script>
+        // Get the add modal
+        var modal1 = document.getElementById("modalAdd");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtnAdd");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close1")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal1.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal1.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal1) {
+                modal.style.display = "none";
+            }
+        }
+                </script>
+                <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                blah.src = URL.createObjectURL(file)
+            }
+        }
+                </script>
+            </body>
+        </html>
